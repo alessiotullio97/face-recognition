@@ -36,5 +36,6 @@ open dataset: http://vintage.winklerbros.net/facescrub.html
 
 url: https://www.upgrad.com/blog/matlab-application-in-face-recognition/
 
+MathLab, image-recognition: https://it.mathworks.com/discovery/image-recognition-matlab.html
 
-
+Interesting Paper: http://www.warse.org/IJATCSE/static/pdf/file/ijatcse17842019.pdf
