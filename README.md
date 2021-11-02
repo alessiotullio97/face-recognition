@@ -1,12 +1,21 @@
 # PROJECT OBJECTIVES:
-Design and implementation of a biometric module using MATLAB or OpenCV, in group
-(strongly suggested).
+Design and implementation of a face recognition biometric module using MATLAB.
 
-## BS MODULE:
-- A BS module using MATLAB or OPENCV
+## Biometric System Steps
+
+// The following has to be refined according to the final implementation 
+
+1. face capture and possible image enhancement
+2. face localization
+3. possible cropping of 1+ regions of interests (ROIs)
+4. Components Identification (eyes, nose, mounth, ...)
+5. Normalization
+6. Feature Extraction
+7. Template construction
 
 ### Module Specifications
 - To Define...
+
 
 ## RERPORT:
 - A detailed report of the project
@@ -39,3 +48,4 @@ url: https://www.upgrad.com/blog/matlab-application-in-face-recognition/
 MathLab, image-recognition: https://it.mathworks.com/discovery/image-recognition-matlab.html
 
 Interesting Paper: http://www.warse.org/IJATCSE/static/pdf/file/ijatcse17842019.pdf
+Nice to Look for Inspiration: https://vision.csee.wvu.edu/publications/
