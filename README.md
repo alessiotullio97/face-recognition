@@ -64,4 +64,6 @@ url: https://www.upgrad.com/blog/matlab-application-in-face-recognition/
 MathLab, image-recognition: https://it.mathworks.com/discovery/image-recognition-matlab.html
 
 Interesting Paper: http://www.warse.org/IJATCSE/static/pdf/file/ijatcse17842019.pdf
+                   https://www.researchgate.net/publication/274521637_A_Review_Of_Face_Recognition_Methods -> for face recognition [no cap 6]
+                   http://www.arpnjournals.org/jeas/research_papers/rp_2016/jeas_1216_5414.pdf -> for face detection
 Nice to Look for Inspiration: https://vision.csee.wvu.edu/publications/
