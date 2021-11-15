@@ -8,10 +8,26 @@ Design and implementation of a face recognition biometric module using MATLAB.
 1. face capture and possible image enhancement
 2. face localization
 3. possible cropping of 1+ regions of interests (ROIs)
+
+The image has to be converted into a 256-RGB color map of size w x h.
+A vector of size n = w x h can be constructed from the map.
+
+Be aware of "Curse of Dimensionality problem" (the lower the resolution the 
+better the results).
+
 4. Components Identification (eyes, nose, mounth, ...)
 5. Normalization
+Normalization (both geometrical and photometric to obtain a canonical form)
 6. Feature Extraction
+Data -> Feature Extraction -> Storage (set of templates)
+Hog Feature extractions: https://www.mathworks.com/help/vision/ref/extracthogfeatures.html
+
+Generalization: the training results has to improve the system recognition.
+
 7. Template construction
+8. Matching
+extracted feature + template feature -> matching score -> decision?
+
 
 ### Module Specifications
 - To Define...
@@ -36,7 +52,7 @@ underline any design choice you had to make in order to have:
 and the part of code developed by you.
 
 ## PERFOMANCE EVALUATION:
-You have to carry out a thorough performance evaluation, possibly in
+You have to carry out a through performance evaluation, possibly in
 verification mode, and results must be reported in the report.
 
 
