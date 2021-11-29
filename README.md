@@ -30,6 +30,7 @@ Data -> Feature Extraction -> Storage (set of templates)
 Hog Feature extractions: https://www.mathworks.com/help/vision/ref/extracthogfeatures.html
 			 https://www.mathworks.com/matlabcentral/answers/93148-why-do-i-receive-the-error-attempt-to-execute-script-filename-as-a-function
 Generalization: the training results has to improve the system recognition.
+Training sample should be different from one of the gallery to increase generalization.
 
 7. Template construction
 
@@ -77,3 +78,7 @@ Interesting Paper: http://www.warse.org/IJATCSE/static/pdf/file/ijatcse17842019.
 Nice to Look for Inspiration: https://vision.csee.wvu.edu/publications/
 
 AT&T Face Database: https://www.kaggle.com/kasikrit/att-database-of-faces
+
+# Questions
+1. Classifier: once for all or computed at each iteration?
+2. AT&T Database, it is good?
