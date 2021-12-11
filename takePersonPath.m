@@ -1,6 +1,6 @@
 function [dbPersonPath] = takePersonPath(dbPath, person)
 
-        personDB = strcat(dbPath, '/peopleDB.txt');
+        personDB = strcat(dbPath, '\peopleDB.txt');
         disp(personDB);
         % Perform a lookup on the personDB: verify if the person has been
         % already registered
@@ -10,7 +10,8 @@ function [dbPersonPath] = takePersonPath(dbPath, person)
         matched = false;
         while ~feof(fileID) && matched == false
                 tline = fgetl(fileID);
-                if strcmp(tline, '')
+                if tline==-1
+                disp("file is empty")
                         break
                 else
                         % [currentFolder, currentPerson] = split(tline, ', ');
@@ -18,6 +19,7 @@ function [dbPersonPath] = takePersonPath(dbPath, person)
 %                         if strcmp(currentPerson{1}, person)
 %                                 dbPersonPath = strcat(dbPath, '/', currentFolder);
 %                                 matched = true;
+                      % disp("I found the person!");
 %                         end
                 end
         end
@@ -31,7 +33,7 @@ function [dbPersonPath] = takePersonPath(dbPath, person)
                 val = cellfun(@(x) numel(x), directoryNames);
                 out = directoryNames(val==max(val));
         
-                [firstIndex, lastIndex] = size(out);
+                [~, lastIndex] = size(out);
                 lastString = out{lastIndex};
         
                 nextIndex = sscanf(lastString, 's%d') + 1;
