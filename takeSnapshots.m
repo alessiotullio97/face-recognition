@@ -1,5 +1,7 @@
-function [success] = takeSnapshots(person, dbPath)
-        n = 10;
+function [success] = takeSnapshots(person, dbPath, n)
+
+        dbPersonPath = takePersonPath(dbPath, person);
+
         % Create the face detector object.
         faceDetector = vision.CascadeObjectDetector();
         
@@ -67,8 +69,7 @@ function [success] = takeSnapshots(person, dbPath)
                                 % Display detected corners.
                                 videoFrame = insertMarker(videoFrame, xyPoints, '+', 'Color', 'white');
                         end
-                % else numPts >= 10
-                else
+                else % else numPts >= 10
                         % Tracking mode.
                         [xyPoints, isFound] = step(pointTracker, videoFrameGray);
                         visiblePoints = xyPoints(isFound, :);
@@ -107,7 +108,7 @@ function [success] = takeSnapshots(person, dbPath)
                 % Check whether the video player window has been closed.
                 runLoop = isOpen(videoPlayer);
                 if mod(frameCount, iterationForSnap) == 0
-                        [snapSuccessJ] = snap(person, dbPath, j);
+                        [snapSuccessJ] = snap(person, dbPersonPath, j);
                         j = j + 1;
                 end
         end
@@ -132,13 +133,15 @@ function [success] = snap(person, dbPath, j)
         getimage = videoFrameGray(position1:position2,position3:position4,:);
         imshow(getimage);
         
-        %resize image
+        % resize image
         getimage = imresize(getimage, [300 300]);
         
         % Modify here. In the folder database2, label the name of ppl and put their
         % faces inside the folder.
-        format = '.jpg'
-        photoPath = strcat(dbPath, person, j, format)
-        imwrite(getimage,photoPath);
+        format = '.pgm'
+
+        % photoPath = strcat(dbPath, person, j, format);
+        photoPath = fullfile(dbPersonPath, j + format);
+        imwrite(getimage, photoPath);
         success = true;
 end
