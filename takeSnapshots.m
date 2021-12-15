@@ -1,4 +1,4 @@
-function [success] = takeSnapshots(person, dbPath, n)
+function [result] = takeSnapshots(person, dbPath, n)
 
         dbPersonPath = takePersonPath(dbPath, person);
 
@@ -24,10 +24,11 @@ function [success] = takeSnapshots(person, dbPath, n)
         runLoop = true;
         numPts = 0;
         frameCount = 0;
-        iterationForSnap = 100;
+        iterationForSnap = 10;
         maxFrameCount = iterationForSnap * n;
-        j = 0;
-        while runLoop && frameCount < maxFrameCount
+        j = 1;
+        result = 0; % result indicates all snapshots has been taken correctly
+        while runLoop && frameCount < maxFrameCount && result == 0
         
                 % Get the next frame.
                 videoFrame = snapshot(cam);
@@ -108,40 +109,17 @@ function [success] = takeSnapshots(person, dbPath, n)
                 % Check whether the video player window has been closed.
                 runLoop = isOpen(videoPlayer);
                 if mod(frameCount, iterationForSnap) == 0
-                        [snapSuccessJ] = snap(person, dbPersonPath, j);
+                        [snapResultJ] = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
+                        if (snapResultJ == -1)
+                                result = -1;
+                        end
                         j = j + 1;
                 end
         end
 
-        success = true;
         % Clean up.
         clear cam;
         release(videoPlayer);
         release(pointTracker);
         release(faceDetector);
-end
-
-function [success] = snap(person, dbPath, j)
-        % HINT: could be interesting to create a registration face where you insert
-        %       your name and take at maximum 10 snapshot
-        position1 = min(bboxPolygon(2),bboxPolygon(4));
-        position2 = max(bboxPolygon(6),bboxPolygon(8));
-        position3 = min(bboxPolygon(1),bboxPolygon(7));
-        position4 = max(bboxPolygon(3),bboxPolygon(5));
-        
-        warning('off')
-        getimage = videoFrameGray(position1:position2,position3:position4,:);
-        imshow(getimage);
-        
-        % resize image
-        getimage = imresize(getimage, [300 300]);
-        
-        % Modify here. In the folder database2, label the name of ppl and put their
-        % faces inside the folder.
-        format = '.pgm'
-
-        % photoPath = strcat(dbPath, person, j, format);
-        photoPath = fullfile(dbPersonPath, j + format);
-        imwrite(getimage, photoPath);
-        success = true;
 end

@@ -2,7 +2,7 @@ clc
 clear all
 close all
 
-function [success] = takeSnapshots('Alessio');
+%function [success] = takeSnapshots('Alessio');
 % Create the face detector object.
 faceDetector = vision.CascadeObjectDetector();
 
@@ -179,6 +179,7 @@ pointTracker = vision.PointTracker('MaxBidirectionalError', 2);
 if exist('cam') == 0
         cam = webcam('Integrated Camera');
 end
+
 % Capture one frame to get its size.
 videoFrame = snapshot(cam);
 frameSize = size(videoFrame);

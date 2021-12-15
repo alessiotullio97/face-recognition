@@ -1,19 +1,31 @@
 clc
 clear all
 close all
-prompt = "What's your name?"
 
-% dialog box ask your name and get your answer
-answer = inputdlg(prompt)
+%% Registration Phase
+%res = registerClient();
+res = 0;
+if (res < 0)
+        msgbox(['An error occured while registering, try running the' ...
+                ' app again']);
+        return;
+end
 
-% numeber of screeshots to be performed
+%% Training and Testing Phase
+[res, trainingFeatures, trainingLabel] = ttSystem();
+if (res < 0)
+        msgbox(['An error occured while Training and Testing the System,' ...
+                ' try running the app again']);
+        return;
+end
 
-num = 10
 
-%dialog box showing your name taken
-f = msgbox(['Welcome ' answer{1} '! Now I will take' num ' snapshots.'])
+%% Identify the Client
+res = identifyClient(trainingFeatures, trainingLabel);
+if (res < 0)
+        msgbox(['An error occurew while Identifying the person']);
+        return;
+end
 
-defaultDB = 'database'
-currentDir = pwd()
-dbPath = fullfile( currentDir, defaultDB);
-[success] = takeSnapshots(answer{1}, dbPath, num)
+disp("The App ended correctly. Bye!");
+
