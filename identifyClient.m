@@ -122,7 +122,6 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                                         %resize image
                                         getimage = imresize(getimage, [300 300]);
                                         
-                                        
                                         queryFeatures = extractHOGFeatures(getimage);
 
                                         [personLabel,PostProbs]  = predict(faceClassifier, queryFeatures);
@@ -141,6 +140,7 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                 step(videoPlayer, videoFrame);
                 
                 end
+                
                 % Check whether the video player window has been closed.
                 runLoop = isOpen(videoPlayer);
         end

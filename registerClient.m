@@ -1,5 +1,10 @@
-function [result] = registerClient()
+function [result] = registerClient(app)
         % Enter your name and register your face within the database
+        app.EnterYourNameEditField.Visible = true;
+        tlabel = uilabel(app.EnterYourNameEditField);
+        tlabel.Text = "What's your name?";
+        
+        return;
         prompt = "What's your name?";
         
         % dialog box ask your name and get your answer
