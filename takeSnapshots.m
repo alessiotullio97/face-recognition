@@ -9,7 +9,6 @@ function [result] = takeSnapshots(person, dbPath, n)
         pointTracker = vision.PointTracker('MaxBidirectionalError', 2);
         
         % Create the webcam object.
-        % Please, specify your WebCam Here.
         if exist('cam') == 0
                 cam = webcam;
         end
@@ -24,9 +23,11 @@ function [result] = takeSnapshots(person, dbPath, n)
         runLoop = true;
         numPts = 0;
         frameCount = 0;
+
         iterationForSnap = 10;
         maxFrameCount = iterationForSnap * n;
         j = 1;
+        
         result = 0; % result indicates all snapshots has been taken correctly
         while runLoop && frameCount < maxFrameCount && result == 0
         
@@ -70,7 +71,7 @@ function [result] = takeSnapshots(person, dbPath, n)
                                 % Display detected corners.
                                 videoFrame = insertMarker(videoFrame, xyPoints, '+', 'Color', 'white');
                         end
-                else % else numPts >= 10
+                else
                         % Tracking mode.
                         [xyPoints, isFound] = step(pointTracker, videoFrameGray);
                         visiblePoints = xyPoints(isFound, :);
@@ -108,11 +109,11 @@ function [result] = takeSnapshots(person, dbPath, n)
             
                 % Check whether the video player window has been closed.
                 runLoop = isOpen(videoPlayer);
+
+                % Evert 'iterationForSnap' save the snap within the
+                % database
                 if mod(frameCount, iterationForSnap) == 0
-                        [snapResultJ] = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
-                        if (snapResultJ == -1)
-                                result = -1;
-                        end
+                        result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
                         j = j + 1;
                 end
         end

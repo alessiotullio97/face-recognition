@@ -10,14 +10,11 @@ function [result] = saveSnap(videoFrameGray, bboxPolygon, path, j)
         imshow(getimage);
         
         % resize image
-        image = imresize(getimage, [300 300]);
+        image = imresize(getimage, [112 92]);
         
-        % Modify here. In the folder database2, label the name of ppl and put their
-        % faces inside the folder.
-        format = '.pgm';
         fileName = sprintf("%d.pgm", j);
-
         photoPath = fullfile(path, fileName);
+        
         try
                 imwrite(image, photoPath);
                 result = 0;

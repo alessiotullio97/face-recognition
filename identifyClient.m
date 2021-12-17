@@ -1,5 +1,6 @@
 function [res] = identifyClient(trainingFeatures, trainingLabel)
-
+        
+        res = -1;
         % Create 40 class classifier using  
         faceClassifier = fitcecoc(trainingFeatures, trainingLabel);
         
@@ -14,6 +15,7 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                 cam = webcam;
         end
         
+
         % Capture one frame to get its size.
         videoFrame = snapshot(cam);
         frameSize = size(videoFrame);
@@ -23,20 +25,16 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                 frameSize(1)]+30]);
         
         
-        if exist('cam') == 0
-                cam = webcam;
-        end
-        
         runLoop = true;
         numPts = 0;
         frameCount = 0;
-        while runLoop && frameCount < 300
+        maxFrames = 300;
+        while runLoop && frameCount < maxFrames
                 
                 % Get the next frame.
                 videoFrame = snapshot(cam);
                 
                 % Get frame to save data to database
-                videoFrame2 = snapshot(cam);
                 videoFrameGray = rgb2gray(videoFrame);
                 frameCount = frameCount + 1;
         
@@ -93,7 +91,6 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                                 % Apply the transformation to the bounding box.
                                 bboxPoints = transformPointsForward(xform, bboxPoints);
                                 
-                                
                                 % Convert the box corners into the [x1 y1 x2 y2 x3 y3 x4 y4]
                                 % format required by insertShape.
                                 bboxPolygon = reshape(bboxPoints', 1, []);
@@ -109,21 +106,21 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                                 % Reset the points.
                                 oldPoints = visiblePoints;
                                 setPoints(pointTracker, oldPoints);
-                                
+
                                 position1 = min(bboxPolygon(2),bboxPolygon(4));
                                 position2 = max(bboxPolygon(6),bboxPolygon(8));
                                 position3 = min(bboxPolygon(1),bboxPolygon(7));
                                 position4 = max(bboxPolygon(3),bboxPolygon(5));
-                                
+                
                                 warning('off')
-                                if position2<640 && position4<640 && position1>0 && position2>0
+                                %if position2<640 && position4<640 && position1>0 && position2>0
                                         getimage = videoFrameGray(position1:position2,position3:position4,:);
-        
+                
                                         %resize image
-                                        getimage = imresize(getimage, [300 300]);
+                                        getimage = imresize(getimage, [112 92]);
                                         
                                         queryFeatures = extractHOGFeatures(getimage);
-
+                
                                         [personLabel,PostProbs]  = predict(faceClassifier, queryFeatures);
                                         maxpro = max(abs(PostProbs(1)),abs(PostProbs(2)));
                                         position = [position3 position2];
@@ -132,24 +129,35 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                                         videoFrame = insertText(videoFrame,position,string,'FontSize', ...
                                             18,'BoxColor',...
                                         box_color,'BoxOpacity',0.4,'TextColor','white');
-                                end
-                        end
-        
-        
-                % Display the annotated video frame using the video player object.
-                step(videoPlayer, videoFrame);
+
+                                        % Show identified Person
+                                        figure;
                 
+                                        subplot(2, 1, 1);
+                                        imshow(getimage);
+                                        title('Input Face');
+                                        
+                                        subplot(2,1,2);
+                                        recognizedFace = getFaceFromDB(personLabel{1});
+                                        imshow(recognizedFace);
+                                        title(string);
+                                        pause(10);
+                                %end
+                        end
                 end
                 
+                % Display the annotated video frame using the video player object.
+                step(videoPlayer, videoFrame);
+        
                 % Check whether the video player window has been closed.
                 runLoop = isOpen(videoPlayer);
         end
-        
+
         res = 0;
+
         % Clean up.
         clear cam;
         release(videoPlayer);
-        
         release(pointTracker);
         release(faceDetector);
 end

@@ -3,7 +3,7 @@ clear all
 close all
 
 %% Registration Phase
-%res = registerClient();
+%res = betaRegisterClient();
 res = 0;
 if (res < 0)
         msgbox(['An error occured while registering, try running the' ...

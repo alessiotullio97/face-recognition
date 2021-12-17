@@ -127,7 +127,7 @@ getimage = videoFrameGray(position1:position2,position3:position4,:);
 imshow(getimage);
 
 %resize image
-getimage = imresize(getimage, [300 300]);
+getimage = imresize(getimage, [112 92]);
 
 % Modify here. In the folder database2, label the name of ppl and put their
 % faces inside the folder.
@@ -154,7 +154,7 @@ title('HoG Feature');
 
 
 % Extract HOG Features for training set 
-trainingFeatures = zeros(size(training,2)*training(1).Count,46656);
+trainingFeatures = zeros(size(training,2)*training(1).Count,4680);
 featureCount = 1;
 for i=1:size(training,2)
         for j = 1:training(i).Count
@@ -177,7 +177,7 @@ pointTracker = vision.PointTracker('MaxBidirectionalError', 2);
 
 % Create the webcam object.
 if exist('cam') == 0
-        cam = webcam('Integrated Camera');
+        cam = webcam;
 end
 
 % Capture one frame to get its size.
@@ -279,7 +279,7 @@ while runLoop && frameCount < 300
             getimage = videoFrameGray(position1:position2,position3:position4,:);
 
             %resize image
-            getimage = imresize(getimage, [300 300]);
+            getimage = imresize(getimage, [112 92]);
 
             
             queryFeatures = extractHOGFeatures(getimage);
