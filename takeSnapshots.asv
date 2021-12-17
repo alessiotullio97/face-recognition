@@ -1,7 +1,5 @@
 function [result] = takeSnapshots(person, dbPath, n,app)
  app.EnterYourNameEditField.Visible=false;
- app.EnterYourNameLabel.Visible=false;
- app.StartButton.Enable=false;
  app.Label.Text= sprintf('%s\n%s',"The operation will take some times.","Please wait until it is finished!");
  app.UIFigure.Pointer= 'watch';
 dbPersonPath = takePersonPath(dbPath, person);
@@ -13,6 +11,7 @@ dbPersonPath = takePersonPath(dbPath, person);
         pointTracker = vision.PointTracker('MaxBidirectionalError', 2);
         
         % Create the webcam object.
+        % Please, specify your WebCam Here.
         if exist('cam') == 0
                 cam = webcam;
         end
@@ -27,11 +26,9 @@ dbPersonPath = takePersonPath(dbPath, person);
         runLoop = true;
         numPts = 0;
         frameCount = 0;
-
         iterationForSnap = 10;
         maxFrameCount = iterationForSnap * n;
         j = 1;
-        
         result = 0; % result indicates all snapshots has been taken correctly
         while runLoop && frameCount < maxFrameCount && result == 0
         
@@ -75,7 +72,7 @@ dbPersonPath = takePersonPath(dbPath, person);
                                 % Display detected corners.
                                 videoFrame = insertMarker(videoFrame, xyPoints, '+', 'Color', 'white');
                         end
-                else
+                else % else numPts >= 10
                         % Tracking mode.
                         [xyPoints, isFound] = step(pointTracker, videoFrameGray);
                         visiblePoints = xyPoints(isFound, :);
@@ -113,20 +110,13 @@ dbPersonPath = takePersonPath(dbPath, person);
             
                 % Check whether the video player window has been closed.
                 runLoop = isOpen(videoPlayer);
-
-                % Evert 'iterationForSnap' save the snap within the
-                % database
                 if mod(frameCount, iterationForSnap) == 0
-<<<<<<< HEAD
-                        result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
-=======
                         [snapResultJ] = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
                         if (snapResultJ == -1)
                                 result = -1;
                         end
-                         app.Label.Text= sprintf('%s\n%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
+                         app.Label.Text= sprintf('%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
  
->>>>>>> 95c726916116aa7791e6559c726b3e0cfa661ed5
                         j = j + 1;
                 end
         end
@@ -137,10 +127,6 @@ dbPersonPath = takePersonPath(dbPath, person);
         release(pointTracker);
         release(faceDetector);
         app.RegisterYourselvesPanel.Visible = false;
-        app.StartButton.Enable=true;
-        app.IdentificationModeButton.Enable=true;
-        app.VerificationModeButton.Enable=true;
-        app.RegisterYourselvesButton.Enable=true;
-        app.UIFigure.Pointer= 'arrow';
+        app.UIFigure.Pointer= 'watch';
         app.Label_2.Text= "Operation completed successfully!";
 end
