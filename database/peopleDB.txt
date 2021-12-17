@@ -1,14 +1,2 @@
 s41, Alessio
-<<<<<<< HEAD
-=======
-s42, Allllll
-s43, Aaaaa
-s44, Ale
-s43, Elisabetta
-s44, Beth
-s45, Chiusoli
-s46, Ciao
-s47, aa
-s48, Ciaooo
-s49, ggggg
->>>>>>> 95c726916116aa7791e6559c726b3e0cfa661ed5
+s42, Elisabetta

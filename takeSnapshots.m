@@ -1,17 +1,17 @@
-function [result] = takeSnapshots(person, dbPath, n,app)
- app.EnterYourNameEditField.Visible=false;
- app.EnterYourNameLabel.Visible=false;
- app.StartButton.Enable=false;
- app.Label.Text= sprintf('%s\n%s',"The operation will take some times.","Please wait until it is finished!");
- app.UIFigure.Pointer= 'watch';
-dbPersonPath = takePersonPath(dbPath, person);
+function [result] = takeSnapshots(person, dbPath, n, app)
+        app.EnterYourNameEditField.Visible = false;
+        app.EnterYourNameLabel.Visible = false;
+        app.StartButton.Enable = false;
+        app.Label.Text= sprintf('%s\n%s',"The operation will take some times.","Please wait until it is finished!");
+        app.UIFigure.Pointer = 'watch';
+
+        dbPersonPath = takePersonPath(dbPath, person);
 
         % Create the face detector object.
         faceDetector = vision.CascadeObjectDetector();
         
         % Create the point tracker object.
-        pointTracker = vision.PointTracker('MaxBidirectionalError', 2);
-        
+        pointTracker = vision.PointTracker('MaxBidirectionalError', 2);    
         % Create the webcam object.
         if exist('cam') == 0
                 cam = webcam;
@@ -117,16 +117,8 @@ dbPersonPath = takePersonPath(dbPath, person);
                 % Evert 'iterationForSnap' save the snap within the
                 % database
                 if mod(frameCount, iterationForSnap) == 0
-<<<<<<< HEAD
                         result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
-=======
-                        [snapResultJ] = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
-                        if (snapResultJ == -1)
-                                result = -1;
-                        end
-                         app.Label.Text= sprintf('%s\n%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
- 
->>>>>>> 95c726916116aa7791e6559c726b3e0cfa661ed5
+                        app.Label.Text= sprintf('%s\n%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
                         j = j + 1;
                 end
         end
@@ -136,11 +128,12 @@ dbPersonPath = takePersonPath(dbPath, person);
         release(videoPlayer);
         release(pointTracker);
         release(faceDetector);
+
         app.RegisterYourselvesPanel.Visible = false;
-        app.StartButton.Enable=true;
-        app.IdentificationModeButton.Enable=true;
-        app.VerificationModeButton.Enable=true;
-        app.RegisterYourselvesButton.Enable=true;
-        app.UIFigure.Pointer= 'arrow';
-        app.Label_2.Text= "Operation completed successfully!";
+        app.StartButton.Enable = true;
+        app.IdentificationModeButton.Enable = true;
+        app.VerificationModeButton.Enable = true;
+        app.RegisterYourselvesButton.Enable = true;
+        app.UIFigure.Pointer = 'arrow';
+        app.Label_2.Text = "Operation completed successfully!";
 end
