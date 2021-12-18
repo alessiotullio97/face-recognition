@@ -1,8 +1,8 @@
-function [res] = identifyClient(trainingFeatures, trainingLabel)
+function [res] = identifyClient(app)
         
         res = -1;
         % Create 40 class classifier using  
-        faceClassifier = fitcecoc(trainingFeatures, trainingLabel);
+        faceClassifier = fitcecoc(app.trainingFeatures, app.trainingLabel);
         
         % Create the face detector object.
         faceDetector = vision.CascadeObjectDetector();
@@ -28,7 +28,11 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
         runLoop = true;
         numPts = 0;
         frameCount = 0;
-        maxFrames = 300;
+        
+        n = 5;          % number of photo
+        iterationForSnap = 10;
+        maxFrames = iterationForSnap * n; 
+        
         while runLoop && frameCount < maxFrames
                 
                 % Get the next frame.
@@ -82,7 +86,7 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                         
                         numPts = size(visiblePoints, 1);
                         
-                        if numPts >= 10
+                        if numPts >= 10 && (frameCount, iterationForSnap) == 0 %% perform the snap every iterationForSnap steps
                                 % Estimate the geometric transformation between the old points
                                 % and the new points.
                                 [xform, oldInliers, visiblePoints] = estimateGeometricTransform(...
@@ -141,11 +145,11 @@ function [res] = identifyClient(trainingFeatures, trainingLabel)
                                         recognizedFace = getFaceFromDB(personLabel{1});
                                         imshow(recognizedFace);
                                         title(string);
-                                        pause(10);
+                                        % pause(10);
                                 %end
                         end
                 end
-                
+                                
                 % Display the annotated video frame using the video player object.
                 step(videoPlayer, videoFrame);
         

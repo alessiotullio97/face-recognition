@@ -5,9 +5,10 @@ function [result] = registerClient(app)
         app.IdentificationModeButton.Enable=false;
         app.VerificationModeButton.Enable=false;
         app.RegisterYourselvesButton.Enable=false;
-         num = 10;
+        num = 10;
         app.Label.Text= sprintf('%s\n%s',"Welcome " + answer+ "!","Now I will take "+ string(num)+ " snapshots.");
- return;   
+ 
+return;   
         
         
       
