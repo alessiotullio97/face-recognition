@@ -1,3 +1,16 @@
+# TO DO
+
+## Workflow of the Applicaiton:
+L'utente deve cliccare il bottone dell'operazione: registrazione, verifica, identificazione.
+
+Ogni bottone setta il Control panel
+
+Due bottoni devono essere presenti (Start e Undo)
+
+Start avvia la relativa rutine in base all'operaione.
+
+Undo resetta tutto al default e ricomicia da capo
+
 # PROJECT OBJECTIVES:
 Design and implementation of a face recognition biometric module using MATLAB.
 

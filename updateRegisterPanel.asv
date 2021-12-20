@@ -1,0 +1,25 @@
+function updateRegisterPanel(app, buttonType)
+        switch buttonType
+                case 'registerButton'
+                        % Enter your name and register your face within the database
+                        app.RegisterYourselvesPanel.Visible = true;
+                        app.EnterYourNameEditField.Text = "Enter Your Name:";
+                        answer = app.EnterYourNameEditField.Value;
+                        app.IdentificationModeButton.Enable = false;
+                        app.VerificationModeButton.Enable = false;
+                        app.RegisterYourselvesButton.Enable = false;
+                        
+                        num = 10;
+                        app.Label.Text= sprintf('%s\n%s',"Welcome " + answer+ "!","Now I will take "+ string(num)+ " snapshots.");
+                case 'verificationButton'
+                        app.RegisterYourselvesPanel.Visible = true;
+                        app.EnterYourNameEditField.Text
+                        app.EnterYourNameEditField.Text = "Select a person to identify from the DB [1-41]:";
+                case 'identificationButton'
+                otherwise
+                        warning('Unexpected buttonType');
+        end
+ 
+end        
+        
+      

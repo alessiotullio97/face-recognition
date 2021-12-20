@@ -10,7 +10,7 @@ function [dbPersonPath] = takePersonPath(dbPath, person)
         fileID = fopen(personDB, 'at+');
         frewind(fileID);
 
-        disp("People db is stored at " + personDB +". fileID = " + string(fileID));
+        disp("People db is stored at " + personDB + ". fileID = " + string(fileID));
 
         matched = false;
         %lineI = 0;
@@ -55,7 +55,6 @@ function [dbPersonPath] = takePersonPath(dbPath, person)
                 
                 dbPersonPath = strcat(dbPath, newFolder);
                 mkdir(dbPersonPath);
-
 
                 % register the person within the DB
                 fprintf(fileID, 's%d, %s\n', nextIndex, person);
