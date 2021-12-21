@@ -1,11 +1,11 @@
 function [result] = registerClient(app, dbPath)
         n = 10; % #snapshots
-        person = app.EnterYourNameEditField.Value;
+        person = app.InputEditField.Value;
 
-        app.EnterYourNameEditField.Visible = false;
-        app.EnterYourNameLabel.Visible = false;
+        app.InputEditField.Visible = false;
+        app.InputEditFieldLabel.Visible = false;
         app.StartButton.Enable = false;
-        app.Label.Text= sprintf('%s\n%s',"The operation will take some times.","Please wait until it is finished!");
+        app.OutputLabel.Text= sprintf('%s\n%s',"The operation will take some times.","Please wait until it is finished!");
         app.UIFigure.Pointer = 'watch';
 
         dbPersonPath = takePersonPath(dbPath, person);
@@ -121,7 +121,7 @@ function [result] = registerClient(app, dbPath)
                 % database
                 if mod(frameCount, iterationForSnap) == 0
                         result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
-                        app.Label.Text= sprintf('%s\n%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
+                        app.OutputLabel.Text= sprintf('%s\n%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
                         j = j + 1;
                 end
         end
@@ -132,11 +132,11 @@ function [result] = registerClient(app, dbPath)
         release(pointTracker);
         release(faceDetector);
 
-        app.RegisterYourselvesPanel.Visible = false;
+        app.InteractivePanel.Visible = false;
         app.StartButton.Enable = true;
         app.IdentificationModeButton.Enable = true;
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
         app.UIFigure.Pointer = 'arrow';
-        app.Label_2.Text = "Operation completed successfully!";
+        app.OutputLabel.Text = "Operation completed successfully!";
 end

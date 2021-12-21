@@ -79,6 +79,8 @@ verification mode, and results must be reported in the report.
 
 
 ## External Resources
+IMPORTANT: another source of the code at  https://codetobuy.com/downloads/matlab-code-for-face-recognition-based-on-histogram-of-oriented-gradients-hog/
+
 open dataset: http://vintage.winklerbros.net/facescrub.html
 
 url: https://www.upgrad.com/blog/matlab-application-in-face-recognition/
