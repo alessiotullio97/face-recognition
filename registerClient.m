@@ -138,5 +138,5 @@ function [result] = registerClient(app, dbPath)
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
         app.UIFigure.Pointer = 'arrow';
-        app.OutputLabel.Text = "Operation completed successfully!";
+        app.Label.Text = "Operation completed successfully!";
 end
