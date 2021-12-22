@@ -1,9 +1,11 @@
 function callRoutine(app)
         switch app.operation
                 case 'registration'
+                    app.OutputLabel.FontColor='black';
                         num = 10;
                         answer = app.InputEditField.Value;
                         if strcmp(answer, '') == 1
+                            app.OutputLabel.FontColor='red';
                                 app.OutputLabel.Text = 'Please, insert a valid name!';
                                 return;
                         else
@@ -17,11 +19,13 @@ function callRoutine(app)
                                 % possibly handle the res < 0 condition
                         end
                 case 'verification'
+                    app.OutputLabel.FontColor='black';
                         s = split(app.PersonListDropDown.Value, ', ');
                         idFolder = sscanf(s{1}, 's%d');
                         declaredIdetity = s{2};
                         [res] = verifyClient(app, idFolder, declaredIdetity);
                 case 'identification'
+                    app.OutputLabel.FontColor='black';
                         s = split(app.PersonListDropDown.Value, ', ');
                         personId = sscanf(s{1}, 's%d');
                         personName = s{2};
