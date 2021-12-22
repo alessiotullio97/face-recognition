@@ -2,10 +2,13 @@
 % Training and Testing the system
 function [res] = ttSystem(app)
         try
+                % Set face classifier to not defined
+                app.faceClDefined = 0;
                 % Load Image Information from ATT Face Database Directory
                 app.faceDatabase = imageSet('database','recursive');
                 
-                % Split Database into Training & Test Sets
+                % Split Database into Training & Test Sets (i.e. 8 image to
+                % db and 2 to test
                 [app.training, app.test] = partition(app.faceDatabase, [0.8 0.2]);
                        
                 %% Extract HOG Features for training set 
@@ -21,6 +24,8 @@ function [res] = ttSystem(app)
                         end
                         app.personIndex{i} = app.faceDatabase(i).Description;
                 end
+
+                app.dbSize = size(app.training, 2);
                 res = 0;
         catch
                 warning('Unable to train the System');

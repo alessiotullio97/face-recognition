@@ -5,7 +5,8 @@ function [result] = registerClient(app, dbPath)
         app.InputEditField.Visible = false;
         app.InputEditFieldLabel.Visible = false;
         app.StartButton.Enable = false;
-        app.OutputLabel.Text= sprintf('%s\n%s',"The operation will take some times.","Please wait until it is finished!");
+        app.OutputLabel.Text= sprintf('%s\n%s',"The operation will take some times.", ...
+                "Please wait until it is finished!");
         app.UIFigure.Pointer = 'watch';
 
         dbPersonPath = takePersonPath(dbPath, person);
@@ -127,7 +128,8 @@ function [result] = registerClient(app, dbPath)
         end
         app.UIFigure.Pointer = 'arrow';
         
-        if result == 0
+        % Train the system again
+        if result == 0 && ttSystem(app) == 0
                 app.OutputLabel.Text = "Operation completed successfully!";
                 %% MODIFY: Show all snapshots taken for registered person
 %                 figure(1);

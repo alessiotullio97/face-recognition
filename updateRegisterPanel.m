@@ -12,14 +12,14 @@ function updateRegisterPanel(app)
                         app.GoBackButton.Enable = true;
                 case 'identification'
                         app.InteractivePanel.Visible = true;
-                        app.InputEditFieldLabel.Text = "Select a person to identify from the DB [1-41]:";
+                        app.InputEditFieldLabel.Text = "Select a person to identify from the DB [1-" + app.dbSize + "]:";
                         app.OutputLabel.Text = 'I Will identify the person you choose.';
                         app.IdentificationModeButton.Enable = false;
                         app.VerificationModeButton.Enable = false;
                         app.RegisterYourselvesButton.Enable = false;
                 case 'verification'
                         app.InteractivePanel.Visible = true;
-                        app.InputEditFieldLabel.Text = "Declare your Identity with respect to the DB [1-41]:";
+                        app.InputEditFieldLabel.Text = "Declare your Identity with respect to the DB [1-" + app.dbSize + "]:";
                         app.OutputLabel.Text = 'I Will verify you identity.';
                         app.IdentificationModeButton.Enable = false;
                         app.VerificationModeButton.Enable = false;

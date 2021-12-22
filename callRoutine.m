@@ -17,9 +17,9 @@ function callRoutine(app)
                                 % possibly handle the res < 0 condition
                         end
                 case 'verification'
-
+                        [res] = verifyClient(app, str2num(app.InputEditField.Value));
                 case 'identification'
-                        [res] = identifyClient(app, app.InputEditField.Value);
+                        [res] = identifyClient(app, str2num(app.InputEditField.Value));
                 otherwise
                         warning('Invalid callRoutine');
         end
