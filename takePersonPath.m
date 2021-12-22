@@ -1,4 +1,4 @@
-function [dbPersonPath] = takePersonPath(dbPath, person)
+function [dbPersonPath, personIndex] = takePersonPath(dbPath, person)
 
         % Locate full path of people DB
         personDB = fullfile(dbPath, 'peopleDB.txt');
@@ -31,6 +31,8 @@ function [dbPersonPath] = takePersonPath(dbPath, person)
                         if strcmp(personI, person) == 1
                                 %dbPersonPath = strcat(dbPath, '/', folderI);
                                 dbPersonPath = fullfile(dbPath, folderI);
+                                %% Modify here tot aek next index
+                               
                                 matched = true;
                         end
                 end
@@ -49,15 +51,15 @@ function [dbPersonPath] = takePersonPath(dbPath, person)
                 [firstIndex, lastIndex] = size(out);
                 lastString = out{lastIndex};
         
-                nextIndex = sscanf(lastString, 's%d') + 1;
+                personIndex = sscanf(lastString, 's%d') + 1;
                     
-                newFolder = sprintf('/s%d', nextIndex);
+                newFolder = sprintf('/s%d', personIndex);
                 
                 dbPersonPath = strcat(dbPath, newFolder);
                 mkdir(dbPersonPath);
 
                 % register the person within the DB
-                fprintf(fileID, 's%d, %s\n', nextIndex, person);
+                fprintf(fileID, 's%d, %s\n', personIndex, person);
         end
 
         fclose(fileID);
