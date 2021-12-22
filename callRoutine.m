@@ -17,9 +17,15 @@ function callRoutine(app)
                                 % possibly handle the res < 0 condition
                         end
                 case 'verification'
-                        [res] = verifyClient(app, str2num(app.InputEditField.Value));
+                        s = split(app.PersonListDropDown.Value, ', ');
+                        idFolder = sscanf(s{1}, 's%d');
+                        declaredIdetity = s{2};
+                        [res] = verifyClient(app, idFolder, declaredIdetity);
                 case 'identification'
-                        [res] = identifyClient(app, str2num(app.InputEditField.Value));
+                        s = split(app.PersonListDropDown.Value, ', ');
+                        personId = sscanf(s{1}, 's%d');
+                        personName = s{2};
+                        [res] = identifyClient(app, personId, personName);
                 otherwise
                         warning('Invalid callRoutine');
         end

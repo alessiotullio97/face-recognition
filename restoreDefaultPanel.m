@@ -7,4 +7,6 @@ function restoreDefaultPanel(app)
         app.IdentificationModeButton.Enable = true;
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
+
+        app.PersonListDropDown.Visible = false;
 end

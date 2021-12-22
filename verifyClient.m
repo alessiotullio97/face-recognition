@@ -1,6 +1,6 @@
-function [res] = verifyClient(app, declaredIdentity)
+function [res] = verifyClient(app, idFolder, declaredPersonId)
         try
-                if declaredIdentity < 1 || declaredIdentity > app.dbSize
+                if idFolder < 1 || idFolder > app.dbSize
                         app.OutputMessage.Text = 'You must specify a value between 1 and ' + string(app.dbSize);
                         res = -1;
                         return;
@@ -144,10 +144,10 @@ function [res] = verifyClient(app, declaredIdentity)
                 queryFeatures = extractHOGFeatures(inputImage);
                 personLabel = predict(app.faceClassifier, queryFeatures);
 
-                if declaredIdentity < 10
-                        declaredIdentityLabel = sprintf("s0%d", declaredIdentity);
+                if idFolder < 10
+                        idFolderLabel = sprintf("s0%d", idFolder);
                 else
-                        declaredIdentityLabel = sprintf("s%d", declaredIdentity);
+                        idFolderLabel = sprintf("s%d", idFolder);
                 end
 
                 % Map back to training set to find identity
@@ -156,17 +156,18 @@ function [res] = verifyClient(app, declaredIdentity)
                 
                 subplot(1,3,1);
                 imshow(inputImage);
-                title( "Query Face - s" + string(declaredIdentity));
+                title( "Query Face" );
 
                 subplot(1,3,2);
                 imshow(read(app.training(matchedIndex),1));
-                title("Matched Class - s" + string(matchedIndex));
+                
+                title("Matched Class - " + getRelativeName(matchedIndex));
                 
                 subplot(1,3,3);
-                imshow(read(app.training(declaredIdentity),1));
-                title("Declared Identity Class - s" + string(declaredIdentity));
+                imshow(read(app.training(idFolder),1));
+                title("Declared Identity Class - " + declaredPersonId);
                 
-                if matchedIndex == declaredIdentity
+                if matchedIndex == idFolder
                         app.OutputLabel.Text = 'The system verified your identity!';
                 else
                         app.OutputLabel.Text = "You're probably liyng about your real identity, or the system missed it!";
@@ -181,6 +182,6 @@ function [res] = verifyClient(app, declaredIdentity)
                 release(faceDetector);
         catch
                 res = -1;
-                warning('Unable to recognize s' + string(declaredIdentity));
+                warning('Unable to recognize s' + string(idFolder));
         end
 end

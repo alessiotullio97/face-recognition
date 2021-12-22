@@ -16,7 +16,7 @@ function [res] = identifyClient(app, personId, personName)
                 personIdLabel = predict(app.faceClassifier, queryFeatures);
 
                 % Map back to training set to find identity
-                booleanIndex = strcmp(personIdLabel, app.personIndex);
+                booleanIndex = strcmp(personIdLabel, app.personIdIndex);
                 matchedIndex = find(booleanIndex);
                 
                 subplot(1,2,1);
