@@ -18,18 +18,23 @@ function [result] = registerClient(app, dbPath)
         pointTracker = vision.PointTracker('MaxBidirectionalError', 2);    
         % Create the webcam object.
         if exist('cam') == 0
-                cam = webcam;
+                app.Camera = webcam;
+                
         end
         
         % Capture one frame to get its size.
-        videoFrame = snapshot(cam);
+        app.UIAxes.Visible=true;
+        app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
+        videoPlayer=preview(app.Camera,app.himg);
+        videoFrame = snapshot(app.Camera);
         frameSize = size(videoFrame);
         
         % Create the video player object.
-        videoPlayer = vision.VideoPlayer('Position', [100 100 [frameSize(2), frameSize(1)]+30]);
+        %videoPlayer = vision.VideoPlayer('Position', 0, 0);
         
         runLoop = true;
         numPts = 0;
+        
         frameCount = 0;
 
         iterationForSnap = 10;
@@ -40,7 +45,7 @@ function [result] = registerClient(app, dbPath)
         while runLoop && frameCount < maxFrameCount && result == 0
         
                 % Get the next frame.
-                videoFrame = snapshot(cam);
+                videoFrame = snapshot(app.Camera);
                 
                 % Get frame to save data to database
                 videoFrameGray = rgb2gray(videoFrame);
@@ -113,10 +118,11 @@ function [result] = registerClient(app, dbPath)
                 end
             
                 % Display the annotated video frame using the video player object.
-                step(videoPlayer, videoFrame);
+                %step(videoPlayer, videoFrame);
             
                 % Check whether the video player window has been closed.
-                runLoop = isOpen(videoPlayer);
+                %
+                % runLoop = isOpen(videoPlayer);
 
                 % Evert 'iterationForSnap' save the snap within the
                 % database
@@ -141,7 +147,7 @@ function [result] = registerClient(app, dbPath)
 
         % Clean up.
         clear cam;
-        release(videoPlayer);
+        %release(videoPlayer);
         release(pointTracker);
         release(faceDetector);
 
@@ -150,4 +156,5 @@ function [result] = registerClient(app, dbPath)
         app.IdentificationModeButton.Enable = true;
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
+        app
 end
