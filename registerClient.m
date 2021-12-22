@@ -126,12 +126,14 @@ function [result] = registerClient(app, dbPath)
                 end
         end
         app.UIFigure.Pointer = 'arrow';
+        
         if result == 0
                 app.OutputLabel.Text = "Operation completed successfully!";
-                figure(1);
-                montage(app.faceDatabase(j).ImageLocation);
-                title('Set of snapshots taken for ' + person)
-        else
+                %% MODIFY: Show all snapshots taken for registered person
+%                 figure(1);
+%                 montage(app.faceDatabase(j).ImageLocation);
+%                 title('Set of snapshots taken for ' + person)
+%         else
                 app.OutputLabel.Text = 'Unable to take 10 snapshots';
         end
 
@@ -146,5 +148,4 @@ function [result] = registerClient(app, dbPath)
         app.IdentificationModeButton.Enable = true;
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
-
 end

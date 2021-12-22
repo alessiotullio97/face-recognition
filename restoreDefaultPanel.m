@@ -2,6 +2,7 @@ function restoreDefaultPanel(app)
         app.InteractivePanel.Visible = false;
         app.InputEditFieldLabel.Text = '';
         app.OutputLabel.Text = '';
+        app.Label.Text = '';
         app.InputEditField.Value = '';
 
         app.IdentificationModeButton.Enable = true;
