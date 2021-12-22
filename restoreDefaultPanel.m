@@ -13,4 +13,5 @@ function restoreDefaultPanel(app)
         app.UIAxes.Visible=false;
         app.himg.Visible=false;
         app.Panel.Visible=false;
+        app.StartButton.Enable=true;
 end
