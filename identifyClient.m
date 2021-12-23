@@ -2,6 +2,7 @@ function [res] = identifyClient(app, personId, personName)
         try
                 warning('off')
                 if personId < 1 || personId > app.dbSize
+                    app.OutputLabel.FontColor='red';
                         app.OutputMessage.Text = 'You must specify a value between 1 and ' + string(app.dbSize);
                         return;
                 end
