@@ -1,6 +1,7 @@
 function [res] = verifyClient(app, idFolder, declaredPersonId)
         try
                 if idFolder < 1 || idFolder > app.dbSize
+                    app.OutputMessage.FontColor='red';
                         app.OutputMessage.Text = 'You must specify a value between 1 and ' + string(app.dbSize);
                         res = -1;
                         return;
@@ -14,18 +15,24 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 
                 % Create the webcam object.
                 if exist('cam') == 0
-                        cam = webcam;
+                        app.Camera = webcam;
                 end
+        app.UIFigure.Pointer = 'watch';
+      
         
+        % Capture one frame to get its size.
+        app.UIAxes.Visible=true;
+        app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
+        videoPlayer=preview(app.Camera,app.himg);
+        videoFrame = snapshot(app.Camera);
+        frameSize = size(videoFrame);
                 % Capture one frame to get its size.
-                videoFrame = snapshot(cam);
+                videoFrame = snapshot(app.Camera);
                 frameSize = size(videoFrame);
                 
-                % Create the video player object.
-                videoPlayer = vision.VideoPlayer('Position', [100 100 [frameSize(2), ...
-                        frameSize(1)]+30]);
+               
                 
-                runLoop = true;
+                
                 numPts = 0;
                 frameCount = 0;
                 
@@ -35,10 +42,10 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
         
                 inputImage = '';
 
-                while runLoop && frameCount < maxFrames
+                while frameCount < maxFrames
 
                         % Get the next frame.
-                        videoFrame = snapshot(cam);
+                        videoFrame = snapshot(app.Camera);
         
                         % Get frame to save data to database
                         videoFrameGray = rgb2gray(videoFrame);
@@ -73,11 +80,11 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         bboxPolygon = reshape(bboxPoints', 1, []);
         
                                         % Display a bounding box around the detected face.
-                                        videoFrame = insertShape(videoFrame, 'Polygon', ...
+                                        videoFrame = insertShape(app.himg, 'Polygon', ...
                                                 bboxPolygon, 'LineWidth', 3);
         
                                         % Display detected corners.
-                                        videoFrame = insertMarker(videoFrame, xyPoints, ...
+                                        videoFrame = insertMarker(app.himg, xyPoints, ...
                                                 '+', 'Color', 'white');
                                 end
                         else
@@ -102,11 +109,11 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         bboxPolygon = reshape(bboxPoints', 1, []);
         
                                         % Display a bounding box around the face being tracked.
-                                        videoFrame = insertShape(videoFrame, 'Polygon', bboxPolygon, ...
+                                        videoFrame = insertShape(app.himg, 'Polygon', bboxPolygon, ...
                                                 'LineWidth', 3);
         
                                         % Display tracked points.
-                                        videoFrame = insertMarker(videoFrame, visiblePoints, '+', ...
+                                        videoFrame = insertMarker(app.himg, visiblePoints, '+', ...
                                                 'Color', 'white');
         
                                         % Reset the points.
@@ -128,14 +135,9 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         end
                                 end
                         end
-
-                        % Display the annotated video frame using the video player object.
-                        step(videoPlayer, videoFrame);
-        
-                        % Check whether the video player window has been closed.
-                        runLoop = isOpen(videoPlayer);
+                        
                 end
-        
+        app.UIFigure.Pointer = 'arrow';
                 if app.faceClDefined == 0
                         app.faceClassifier = fitcecoc(app.trainingFeatures, app.trainingLabel);
                         app.faceClDefined = 1;
@@ -170,14 +172,14 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 if matchedIndex == idFolder
                         app.OutputLabel.Text = 'The system verified your identity!';
                 else
+                    app.OutputLabel.FontColor='red';
                         app.OutputLabel.Text = "You're probably liyng about your real identity, or the system missed it!";
                 end
 
                 res = 0;
 
                 % Clean up.
-                clear cam;
-                release(videoPlayer);
+                clear app.Camera;
                 release(pointTracker);
                 release(faceDetector);
         catch
