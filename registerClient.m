@@ -1,9 +1,6 @@
 function [result] = registerClient(app, dbPath)
         n = 10; % #snapshots
         person = app.InputEditField.Value;
-
-        app.InputEditField.Visible = false;
-        app.InputEditFieldLabel.Visible = false;
         app.StartButton.Enable = false;
         app.OutputLabel.Text= sprintf('%s\n%s',"The operation will take some times.", ...
                 "Please wait until it is finished!");
@@ -28,10 +25,6 @@ function [result] = registerClient(app, dbPath)
         videoPlayer=preview(app.Camera,app.himg);
         videoFrame = snapshot(app.Camera);
         frameSize = size(videoFrame);
-        
-        % Create the video player object.
-        %videoPlayer = vision.VideoPlayer('Position', 0, 0);
-        
         runLoop = true;
         numPts = 0;
         
@@ -117,17 +110,10 @@ function [result] = registerClient(app, dbPath)
                         end   
                 end
             
-                % Display the annotated video frame using the video player object.
-                %step(videoPlayer, videoFrame);
-            
-                % Check whether the video player window has been closed.
-                %
-                % runLoop = isOpen(videoPlayer);
-
                 % Evert 'iterationForSnap' save the snap within the
                 % database
                 if mod(frameCount, iterationForSnap) == 0
-                        result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j);
+                        result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j,app);
                         app.OutputLabel.Text= sprintf('%s\n%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
                         j = j + 1;
                 end
@@ -136,24 +122,27 @@ function [result] = registerClient(app, dbPath)
         
         % Train the system again
         if result == 0 && ttSystem(app) == 0
+            
                 app.OutputLabel.Text = "Operation completed successfully!";
                 %% MODIFY: Show all snapshots taken for registered person
 %                 figure(1);
 %                 montage(app.faceDatabase(j).ImageLocation);
 %                 title('Set of snapshots taken for ' + person)
         else
+           app.OutputLabel.FontColor='red';
                 app.OutputLabel.Text = 'Unable to take 10 snapshots';
         end
 
         % Clean up.
-        clear cam;
-        %release(videoPlayer);
+        clear app.Camera;
         release(pointTracker);
         release(faceDetector);
-
-        app.InteractivePanel.Visible = false;
-        app.StartButton.Enable = true;
+         app.InputEditField.Visible = false;
+        app.InputEditFieldLabel.Visible = false;
+        app.UIAxes.Visible=false;
+        app.himg.Visible=false;
         app.IdentificationModeButton.Enable = true;
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
+       app.Panel.Visible=true;
 end
