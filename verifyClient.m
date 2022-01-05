@@ -21,7 +21,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
       
         
         % Capture one frame to get its size.
-        app.UIAxes.Visible=true;
+   
         app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
         videoPlayer=preview(app.Camera,app.himg);
         videoFrame = snapshot(app.Camera);
@@ -157,19 +157,23 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 % Map back to training set to find identity
                 booleanIndex = strcmp(personLabel, app.personIndex);
                 matchedIndex = find(booleanIndex);
+                clear app.Camera;
                 
-                subplot(1,3,1);
-                imshow(inputImage);
-                title( "Query Face" );
-
-                subplot(1,3,2);
-                imshow(read(app.training(matchedIndex),1));
-                
-                title("Matched Class - " + getRelativeName(matchedIndex));
-                
-                subplot(1,3,3);
-                imshow(read(app.training(idFolder),1));
-                title("Declared Identity Class - " + declaredPersonId);
+                app.UIAxes.Visible=false;
+                app.himg.Visible=false;
+                     app.UIAxes2.Visible=true;
+                app.UIAxes4.Visible=true;
+                app.UIAxes3.Visible=true;
+                app.PanelAxes.Visible=true;
+                imshow(inputImage, 'parent',app.UIAxes2);
+                title( "Query Face", 'parent',app.UIAxes2);
+                matchedImage=read(app.training(matchedIndex),1);
+                imshow(matchedImage, 'parent',app.UIAxes3);
+               
+                title("Matched Class - " + getRelativeName(matchedIndex), 'parent',app.UIAxes3);
+                declaredIdentity=read(app.training(idFolder),1);
+                imshow(declaredIdentity, 'parent',app.UIAxes4);
+                title("Declared Identity Class - " + declaredPersonId, 'parent',app.UIAxes4);
                 
                 if matchedIndex == idFolder
                         app.OutputLabel.Text = 'The system verified your identity!';
@@ -184,6 +188,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 clear app.Camera;
                 release(pointTracker);
                 release(faceDetector);
+                
         catch
                 res = -1;
                 warning('Unable to recognize s' + string(idFolder));

@@ -26,6 +26,7 @@ function callRoutine(app)
                         [res] = verifyClient(app, idFolder, declaredIdetity);
                 case 'identification'
                     app.OutputLabel.FontColor='black';
+                    app.UIFigure.Pointer = 'watch';
                         s = split(app.PersonListDropDown.Value, ', ');
                         personId = sscanf(s{1}, 's%d');
                         personName = s{2};
