@@ -39,10 +39,10 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 n = 1;          % number of photo
                 iterationForSnap = 10;
                 maxFrames = iterationForSnap * n; 
-        
+        runLoop=true;
                 inputImage = '';
 
-                while frameCount < maxFrames
+                while runLoop && frameCount < maxFrames 
 
                         % Get the next frame.
                         videoFrame = snapshot(app.Camera);
@@ -80,11 +80,11 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         bboxPolygon = reshape(bboxPoints', 1, []);
         
                                         % Display a bounding box around the detected face.
-                                        videoFrame = insertShape(app.himg, 'Polygon', ...
+                                        videoFrame = insertShape(videoFrame, 'Polygon', ...
                                                 bboxPolygon, 'LineWidth', 3);
         
                                         % Display detected corners.
-                                        videoFrame = insertMarker(app.himg, xyPoints, ...
+                                        videoFrame = insertMarker(videoFrame, xyPoints, ...
                                                 '+', 'Color', 'white');
                                 end
                         else
@@ -109,16 +109,17 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         bboxPolygon = reshape(bboxPoints', 1, []);
         
                                         % Display a bounding box around the face being tracked.
-                                        videoFrame = insertShape(app.himg, 'Polygon', bboxPolygon, ...
+                                        videoFrame = insertShape(videoFrame, 'Polygon', bboxPolygon, ...
                                                 'LineWidth', 3);
         
                                         % Display tracked points.
-                                        videoFrame = insertMarker(app.himg, visiblePoints, '+', ...
+                                        videoFrame = insertMarker(videoFrame, visiblePoints, '+', ...
                                                 'Color', 'white');
         
                                         % Reset the points.
                                         oldPoints = visiblePoints;
                                         setPoints(pointTracker, oldPoints);
+                                              
         
                                         % perform the snap every iterationForSnap steps
                                         if mod(frameCount, iterationForSnap) == 0
@@ -132,7 +133,8 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
         
                                                 %resize image
                                                 inputImage = imresize(inputImage, [112 92]);
-                                        end
+
+                                  end
                                 end
                         end
                         

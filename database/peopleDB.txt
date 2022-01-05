@@ -38,12 +38,7 @@ s38, James
 s39, Lopez
 s40, Paul
 s41, Alessio
-s42, vv
-s43, cc
-s44, Betta
-s45, vvvvv
-s46, Betta2
-s47, c
+
 s48, df
 s49, kk
 s50, f
