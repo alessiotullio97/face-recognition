@@ -165,6 +165,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 app.UIAxes4.Visible=true;
                 app.UIAxes3.Visible=true;
                 app.PanelAxes.Visible=true;
+                app.Panel_2.Visible=true;
                 imshow(inputImage, 'parent',app.UIAxes2);
                 title( "Query Face", 'parent',app.UIAxes2);
                 matchedImage=read(app.training(matchedIndex),1);

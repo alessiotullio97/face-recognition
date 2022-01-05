@@ -16,8 +16,10 @@ function updateRegisterPanel(app)
                         app.RegisterYourselvesButton.Enable = false;
                         app.StartButton.Enable = true;
                         app.GoBackButton.Enable = true;
+                        app.Panel_2.Visible=false;
                 case 'identification'
                     app.PanelAxes.Visible=false;
+                    app.Panel_2.Visible=false;
                     app.UIAxes2.Visible=false;
                 app.UIAxes3.Visible=false;
                 app.UIAxes4.Visible=false;
@@ -30,6 +32,7 @@ function updateRegisterPanel(app)
                         app.RegisterYourselvesButton.Enable = false;
                         updatePersonListBox(app);
                 case 'verification'
+                    app.Panel_2.Visible=false;
                     app.PanelAxes.Visible=false;
                     app.UIAxes2.Visible=false;
                 app.UIAxes4.Visible=false;
