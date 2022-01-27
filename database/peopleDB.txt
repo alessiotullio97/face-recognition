@@ -37,15 +37,3 @@ s37, Richard
 s38, James
 s39, Lopez
 s40, Paul
-s41, Alessio
-
-s48, df
-s49, kk
-s50, f
-s51, er
-s52, hj
-s53, jklò
-s54, bn
-s55, njmk
-s56, sdfg
-s57, asd

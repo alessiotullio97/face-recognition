@@ -2,7 +2,8 @@ function [result] = registerClient(app, dbPath)
         n = 10; % #snapshots
         person = app.InputEditField.Value;
         app.StartButton.Enable = false;
-        app.OutputLabel.Text= sprintf('%s\n%s',"The operation will take some times.", ...
+        app.OutputLabel.Text= sprintf('%s\n%s\n%s',"The operation will take some times.", ...
+            "HINT: Try to move a little to take better snapshots",...
                 "Please wait until it is finished!");
         app.UIFigure.Pointer = 'watch';
 
@@ -30,7 +31,7 @@ function [result] = registerClient(app, dbPath)
         
         frameCount = 0;
 
-        iterationForSnap = 10;
+        iterationForSnap = 100;
         maxFrameCount = iterationForSnap * n;
         j = 1;
         
