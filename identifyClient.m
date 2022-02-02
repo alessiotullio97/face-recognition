@@ -1,4 +1,6 @@
 function [res] = identifyClient(app, personId, personName)
+
+
         try
                 warning('off')
                 if personId < 1 || personId > app.dbSize
@@ -19,15 +21,19 @@ function [res] = identifyClient(app, personId, personName)
                 % Map back to training set to find identity
                 booleanIndex = strcmp(personIdLabel, app.personIndex);
                 matchedIndex = find(booleanIndex);
-                
-                subplot(1,2,1);
-                imshow(queryImage);
-                title( "Query Face - " + personName);
-                subplot(1,2,2);
-
-                imshow(read(app.training(matchedIndex),1));
-                title("Matched Class - " + getRelativeName(matchedIndex));
+                app.PanelAxes.Visible=true;
+                app.UIAxes2.Visible=true;
+                app.UIAxes4.Visible=true;
+                imshow(queryImage, 'parent',app.UIAxes2);
+                title( "Query Face - " + personName,'parent',app.UIAxes2);
+                title("Matched Class - " + getRelativeName(matchedIndex), 'parent', app.UIAxes4);
+                matchedImage=read(app.training(matchedIndex),1);
+                imshow(matchedImage, 'parent', app.UIAxes4);
+                app.OutputLabel.Text = "Person identified!";
+                app.UIFigure.Pointer = 'arrow';
                 res = 0;
+            
+                
         catch
                 res = -1;
                 warning('Unable to recognize s' + string(personId));
