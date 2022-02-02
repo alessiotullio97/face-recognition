@@ -1,3 +1,28 @@
+# Questions
+	1. Classifier: how do we train the classifier with positive and negative
+	example?
+
+BEAWARE:
+	In identification closed set there is no Acceptance threshold
+
+1. Aumento tempo campionamento/Selezione campione più significativi 
+per aumentare differenza samples. (Dire all'utente di fare diverse espressioni facciali).
+
+2. Hog Feature su bocca, naso, occhi
+	trying to fix the pseudocode
+
+3. Verifica prestazioni (FER, FAR, EER, ROC)
+Attenzione sul FAR: identity falsa può venire sia da un impostore esterno che interno.
+
+
+4. CMC per identification closed set.
+
+
+// Pay attention here
+5. Gallery: image set for identification/verification != dataset
+testing = gallery | probes
+training
+
 # PROJECT OBJECTIVES:
 Design and implementation of a face recognition biometric module using MATLAB.
 
@@ -78,7 +103,3 @@ Interesting Paper: http://www.warse.org/IJATCSE/static/pdf/file/ijatcse17842019.
 Nice to Look for Inspiration: https://vision.csee.wvu.edu/publications/
 
 AT&T Face Database: https://www.kaggle.com/kasikrit/att-database-of-faces
-
-# Questions
-1. Classifier: once for all or computed at each iteration?
-2. AT&T Database, it is good?

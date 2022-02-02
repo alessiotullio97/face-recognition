@@ -2,7 +2,7 @@ function [res] = identifyClient(app, personId, personName)
         try
                 warning('off')
                 if personId < 1 || personId > app.dbSize
-                    app.OutputLabel.FontColor='red';
+                        app.OutputLabel.FontColor='red';
                         app.OutputMessage.Text = 'You must specify a value between 1 and ' + string(app.dbSize);
                         return;
                 end
@@ -13,7 +13,7 @@ function [res] = identifyClient(app, personId, personName)
                 end
 
                 queryImage = read(app.test(personId), 1);
-                queryFeatures = extractHOGFeatures(queryImage);
+                queryFeatures = extractSeparatedHOGFeatures(queryImage);
                 personIdLabel = predict(app.faceClassifier, queryFeatures);
 
                 % Map back to training set to find identity

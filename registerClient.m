@@ -16,7 +16,6 @@ function [result] = registerClient(app, dbPath)
         % Create the webcam object.
         if exist('cam') == 0
                 app.Camera = webcam;
-                
         end
         
         % Capture one frame to get its size.
@@ -113,7 +112,7 @@ function [result] = registerClient(app, dbPath)
                 % Evert 'iterationForSnap' save the snap within the
                 % database
                 if mod(frameCount, iterationForSnap) == 0
-                        result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j,app);
+                        result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j, app);
                         app.OutputLabel.Text= sprintf('%s\n%s\n%s',"The operation will take some times.","Please wait until it is finished!", j +" snapshot of 10 taken");
                         j = j + 1;
                 end
@@ -129,7 +128,7 @@ function [result] = registerClient(app, dbPath)
 %                 montage(app.faceDatabase(j).ImageLocation);
 %                 title('Set of snapshots taken for ' + person)
         else
-           app.OutputLabel.FontColor='red';
+                app.OutputLabel.FontColor = 'red';
                 app.OutputLabel.Text = 'Unable to take 10 snapshots';
         end
 
@@ -137,12 +136,12 @@ function [result] = registerClient(app, dbPath)
         clear app.Camera;
         release(pointTracker);
         release(faceDetector);
-         app.InputEditField.Visible = false;
+        app.InputEditField.Visible = false;
         app.InputEditFieldLabel.Visible = false;
         app.UIAxes.Visible=false;
         app.himg.Visible=false;
         app.IdentificationModeButton.Enable = true;
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
-       app.Panel.Visible=true;
+        app.Panel.Visible=true;
 end

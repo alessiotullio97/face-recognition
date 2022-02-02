@@ -10,28 +10,29 @@ function [result] = saveSnap(videoFrameGray, bboxPolygon, path, j,app)
         app.ax=uiaxes(app.Panel);
         app.ax.Visible=false;
         if(j<=5)
-            i=j-1
-             x=1+i*160;
-        y=125;
-        w=160;
-        z=270;
+                i=j-1
+                x=1+i*160;
+                y=125;
+                w=160;
+                z=270;
         else 
-          i=j-6
-        x= 1+i*160;
-        y=0;
-        w=160;
-        z=270;
+                i=j-6
+                x= 1+i*160;
+                y=0;
+                w=160;
+                z=270;
         end
         app.ax(j)=uiaxes(app.Panel, 'Position', [x,y,w,z]);
         app.ax(j).Colormap = [1 0 1; 0 0 1; 1 1 0];
        
-      imshow(getimage, 'parent',app.ax(j));
+        imshow(getimage, 'parent', app.ax(j));
 
   
         
         
+
         % resize image
-        image1 = imresize(getimage, [112 92]);
+        image1 = imresize(getimage, app.defaultImSIze);
         
         fileName = sprintf("%d.pgm", j);
         photoPath = fullfile(path, fileName);

@@ -1,7 +1,7 @@
 function [res] = verifyClient(app, idFolder, declaredPersonId)
         try
                 if idFolder < 1 || idFolder > app.dbSize
-                    app.OutputMessage.FontColor='red';
+                        app.OutputMessage.FontColor='red';
                         app.OutputMessage.Text = 'You must specify a value between 1 and ' + string(app.dbSize);
                         res = -1;
                         return;
@@ -17,15 +17,15 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 if exist('cam') == 0
                         app.Camera = webcam;
                 end
-        app.UIFigure.Pointer = 'watch';
-      
-        
-        % Capture one frame to get its size.
-        app.UIAxes.Visible=true;
-        app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
-        videoPlayer=preview(app.Camera,app.himg);
-        videoFrame = snapshot(app.Camera);
-        frameSize = size(videoFrame);
+                app.UIFigure.Pointer = 'watch';
+              
+                
+                % Capture one frame to get its size.
+                app.UIAxes.Visible=true;
+                app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
+                videoPlayer=preview(app.Camera,app.himg);
+                videoFrame = snapshot(app.Camera);
+                frameSize = size(videoFrame);
                 % Capture one frame to get its size.
                 videoFrame = snapshot(app.Camera);
                 frameSize = size(videoFrame);
@@ -39,10 +39,10 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 n = 1;          % number of photo
                 iterationForSnap = 10;
                 maxFrames = iterationForSnap * n; 
-        
-                inputImage = '';
+                runLoop=true;
+                I = '';
 
-                while frameCount < maxFrames
+                while runLoop && frameCount < maxFrames 
 
                         % Get the next frame.
                         videoFrame = snapshot(app.Camera);
@@ -80,11 +80,11 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         bboxPolygon = reshape(bboxPoints', 1, []);
         
                                         % Display a bounding box around the detected face.
-                                        videoFrame = insertShape(app.himg, 'Polygon', ...
+                                        videoFrame = insertShape(videoFrame, 'Polygon', ...
                                                 bboxPolygon, 'LineWidth', 3);
         
                                         % Display detected corners.
-                                        videoFrame = insertMarker(app.himg, xyPoints, ...
+                                        videoFrame = insertMarker(videoFrame, xyPoints, ...
                                                 '+', 'Color', 'white');
                                 end
                         else
@@ -109,16 +109,17 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         bboxPolygon = reshape(bboxPoints', 1, []);
         
                                         % Display a bounding box around the face being tracked.
-                                        videoFrame = insertShape(app.himg, 'Polygon', bboxPolygon, ...
+                                        videoFrame = insertShape(videoFrame, 'Polygon', bboxPolygon, ...
                                                 'LineWidth', 3);
         
                                         % Display tracked points.
-                                        videoFrame = insertMarker(app.himg, visiblePoints, '+', ...
+                                        videoFrame = insertMarker(videoFrame, visiblePoints, '+', ...
                                                 'Color', 'white');
         
                                         % Reset the points.
                                         oldPoints = visiblePoints;
                                         setPoints(pointTracker, oldPoints);
+                                              
         
                                         % perform the snap every iterationForSnap steps
                                         if mod(frameCount, iterationForSnap) == 0
@@ -128,22 +129,24 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                                 position4 = max(bboxPolygon(3), bboxPolygon(5));
         
                                                 warning('off')
-                                                inputImage = videoFrameGray(position1:position2,position3:position4,:);
+                                                I = videoFrameGray(position1:position2,position3:position4,:);
         
                                                 %resize image
-                                                inputImage = imresize(inputImage, [112 92]);
-                                        end
+                                                I = imresize(I, app.defaultImSize);
+
+                                  end
                                 end
                         end
                         
                 end
-        app.UIFigure.Pointer = 'arrow';
+
+                app.UIFigure.Pointer = 'arrow';
                 if app.faceClDefined == 0
                         app.faceClassifier = fitcecoc(app.trainingFeatures, app.trainingLabel);
                         app.faceClDefined = 1;
                 end
 
-                queryFeatures = extractHOGFeatures(inputImage);
+                queryFeatures = extractSeparatedHOGFeatures(I);
                 personLabel = predict(app.faceClassifier, queryFeatures);
 
                 if idFolder < 10
@@ -157,7 +160,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 matchedIndex = find(booleanIndex);
                 
                 subplot(1,3,1);
-                imshow(inputImage);
+                imshow(I);
                 title( "Query Face" );
 
                 subplot(1,3,2);
@@ -172,7 +175,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 if matchedIndex == idFolder
                         app.OutputLabel.Text = 'The system verified your identity!';
                 else
-                    app.OutputLabel.FontColor='red';
+                        app.OutputLabel.FontColor='red';
                         app.OutputLabel.Text = "You're probably liyng about your real identity, or the system missed it!";
                 end
 
