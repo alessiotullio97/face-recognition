@@ -25,8 +25,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
            
                 app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
                 videoPlayer=preview(app.Camera,app.himg);
-                videoFrame = snapshot(app.Camera);
-                frameSize = size(videoFrame);
+                
                 % Capture one frame to get its size.
                 videoFrame = snapshot(app.Camera);
                 frameSize = size(videoFrame);
@@ -37,7 +36,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 n = 1;          % number of photo
                 iterationForSnap = 10;
                 maxFrames = iterationForSnap * n; 
-                runLoop=true;
+                runLoop = true;
                 I = '';
 
                 while runLoop && frameCount < maxFrames 
@@ -120,22 +119,27 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                               
         
                                         % perform the snap every iterationForSnap steps
-                                        if mod(frameCount, iterationForSnap) == 0
-                                                position1 = min(bboxPolygon(2), bboxPolygon(4));
-                                                position2 = max(bboxPolygon(6), bboxPolygon(8));
-                                                position3 = min(bboxPolygon(1), bboxPolygon(7));
-                                                position4 = max(bboxPolygon(3), bboxPolygon(5));
-        
-                                                warning('off')
-                                                I = videoFrameGray(position1:position2,position3:position4,:);
-        
-                                                %resize image
-                                                I = imresize(I, app.defaultImSize);
+                                
+                                        position1 = min(bboxPolygon(2), bboxPolygon(4));
+                                        position2 = max(bboxPolygon(6), bboxPolygon(8));
+                                        position3 = min(bboxPolygon(1), bboxPolygon(7));
+                                        position4 = max(bboxPolygon(3), bboxPolygon(5));
 
-                                  end
+                                        warning('off')
+                                        I = videoFrameGray(position1:position2,position3:position4,:);
+
+                                        %resize image
+                                        I = imresize(I, app.defaultImSize);
+                                        runLoop = false;
                                 end
                         end
                         
+                end
+
+                if(isempty(I))
+                        res = -1;
+                        warninig("Unable to snap a valid frame");
+                        return;
                 end
 
                 app.UIFigure.Pointer = 'arrow';
@@ -143,8 +147,8 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                         app.faceClassifier = fitcecoc(app.trainingFeatures, app.trainingLabel);
                         app.faceClDefined = 1;
                 end
-
-                queryFeatures = extractSeparatedHOGFeatures(I);
+                
+                queryFeatures = extractSeparatedHOGFeatures(I, app);
                 personLabel = predict(app.faceClassifier, queryFeatures);
 
                 if idFolder < 10
@@ -158,29 +162,19 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 matchedIndex = find(booleanIndex);
                 clear app.Camera;
                 
-<<<<<<< HEAD
-                subplot(1,3,1);
-                imshow(I);
-                title( "Query Face" );
 
-                subplot(1,3,2);
-                imshow(read(app.training(matchedIndex),1));
                 
-                title("Matched Class - " + getRelativeName(matchedIndex));
-                
-                subplot(1,3,3);
-                imshow(read(app.training(idFolder),1));
-                title("Declared Identity Class - " + declaredPersonId);
-=======
+       
                 app.UIAxes.Visible=false;
                 app.himg.Visible=false;
-                     app.UIAxes2.Visible=true;
+                app.UIAxes2.Visible=true;
                 app.UIAxes4.Visible=true;
                 app.UIAxes3.Visible=true;
                 app.PanelAxes.Visible=true;
                 app.Panel_2.Visible=true;
-                imshow(inputImage, 'parent',app.UIAxes2);
-                title( "Query Face", 'parent',app.UIAxes2);
+
+                imshow(I, 'parent', app.UIAxes2);
+                title( "Query Face", 'parent', app.UIAxes2);
                 matchedImage=read(app.training(matchedIndex),1);
                 imshow(matchedImage, 'parent',app.UIAxes3);
                
@@ -188,7 +182,7 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 declaredIdentity=read(app.training(idFolder),1);
                 imshow(declaredIdentity, 'parent',app.UIAxes4);
                 title("Declared Identity Class - " + declaredPersonId, 'parent',app.UIAxes4);
->>>>>>> 612332b3b59ada7193e761b9d46bfe8978b9be1c
+
                 
                 if matchedIndex == idFolder
                         app.OutputLabel.Text = 'The system verified your identity!';

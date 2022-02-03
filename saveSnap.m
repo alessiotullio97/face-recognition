@@ -32,7 +32,7 @@ function [result] = saveSnap(videoFrameGray, bboxPolygon, path, j,app)
         
 
         % resize image
-        image1 = imresize(getimage, app.defaultImSIze);
+        image1 = imresize(getimage, app.defaultImSize);
         
         fileName = sprintf("%d.pgm", j);
         photoPath = fullfile(path, fileName);

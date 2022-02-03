@@ -1,5 +1,5 @@
 function restoreDefaultPanel(app)
-        %app.PanelAxes.Visible=false;
+        app.PanelAxes.Visible=false;
         app.UIAxes2.Visible=false;
         app.Panel_2.Visible=false;
         app.UIAxes4.Visible=false;

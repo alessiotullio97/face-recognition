@@ -1,6 +1,4 @@
 function [res] = identifyClient(app, personId, personName)
-
-
         try
                 warning('off')
                 if personId < 1 || personId > app.dbSize
@@ -15,7 +13,7 @@ function [res] = identifyClient(app, personId, personName)
                 end
 
                 queryImage = read(app.test(personId), 1);
-                queryFeatures = extractSeparatedHOGFeatures(queryImage);
+                queryFeatures = extractSeparatedHOGFeatures(queryImage, app);
                 personIdLabel = predict(app.faceClassifier, queryFeatures);
 
                 % Map back to training set to find identity
@@ -32,8 +30,6 @@ function [res] = identifyClient(app, personId, personName)
                 app.OutputLabel.Text = "Person identified!";
                 app.UIFigure.Pointer = 'arrow';
                 res = 0;
-            
-                
         catch
                 res = -1;
                 warning('Unable to recognize s' + string(personId));
