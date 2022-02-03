@@ -1,12 +1,12 @@
-function [BB, res] = detectNose(I, app)
+function [BB, res] = detectEyes(I, app)
         try
-                %To detect Nose
-                if(app.ndPresent == 0)
-                        noseThreshold = 16;
-                        app.NoseDetect = vision.CascadeObjectDetector('Nose', 'MergeThreshold', noseThreshold);
+                %To detect Eyes
+                if(app.edPresent == 0)
+                        app.EyesDetect = vision.CascadeObjectDetector('EyePairBig');        
+                        app.edPresent = 1;
                 end
                 
-                BB = step(app.NoseDetect, I);
+                BB = step(app.EyesDetect, I);
                 
                 if(isempty(BB))
                         res = -1;

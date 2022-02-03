@@ -1,2 +1,4 @@
-
+.gitignore
 *.asv
+localCP/
+separatedHogFeatures/

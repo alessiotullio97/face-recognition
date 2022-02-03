@@ -1,18 +1,21 @@
-function getEyesMinSize(app)
+function getMinMouthSize(app)
         m = 200;
         n = 200;
         
-        %To detect Eyes
-        if(app.edPresent == 0)
-                app.EyeDetect = vision.CascadeObjectDetector('EyePairBig');        
-                app.edPresent = 1;
+        %To detect Mouth
+        if(app.mdPresent == 0)
+                mouthTh = 16;
+                app.MouthDetect = vision.CascadeObjectDetector('Mouth','MergeThreshold',mouthTh);
+                app.mdPresent = 1;
         end
+        
         % Iterate over app.training set
         for i = 1:size(app.training, 2)
                 for j = 1:app.training(i).Count
                         I = read(app.training(i), j);
-                        BB = step(app.EyeDetect,I);
+                        BB = step(app.MouthDetect, I);
                         if(~isempty(BB))
+                                BB = BB(1,:);
                                 [r, c] = size(imcrop(I, BB));
                                 if (r < m)
                                         m = r;
@@ -28,8 +31,9 @@ function getEyesMinSize(app)
         for i = 1:size(app.test, 2)
                 for j = 1:app.test(i).Count
                         I = read(app.test(i), j);
-                        BB = step(app.EyeDetect,I);
+                        BB = step(app.MouthDetect,I);
                         if(~isempty(BB))
+                                BB = BB(1,:);
                                 [r, c] = size(imcrop(I, BB));
                                 if (r < m)
                                         m = r;
@@ -41,12 +45,21 @@ function getEyesMinSize(app)
                 end
         end
 
-        app.eyesResizedSize = [m, n];
+        app.mouthResizedSize = [m, n];
         
-        I = read(app.training(1), 1);
-        BB = step(app.EyeDetect,I);
-        Icropped = imcrop(I, BB);
-        Iresized = imresize(Icropped, app.eyesResizedSize);
-        [r, c] = size(extractHOGFeatures(Iresized));
-        app.eyesFeatureSize = r*c;
+        BB = [];
+        i = 1;
+        j = 1;
+        while (isempty(BB))
+                I = read(app.training(i), j);
+                BB = step(app.MouthDetect, I);
+                if(~isempty(BB))
+                        BB = BB(1,:);
+                        Icropped = imcrop(I, BB);
+                        Iresized = imresize(Icropped, app.mouthResizedSize);
+                        [r, c] = size(extractHOGFeatures(Iresized, 'CellSize', app.defaultCellSize));
+                        app.mouthFeatureSize = r*c;
+                end
+                i = i + 1;
+        end
 end
