@@ -2,7 +2,7 @@ function [res] = identifyClient(app, personId, personName)
         try
                 warning('off')
                 if personId < 1 || personId > app.dbSize
-                        app.OutputLabel.FontColor='red';
+                        app.OutputLabel.FontColor = 'red';
                         app.OutputMessage.Text = 'You must specify a value between 1 and ' + string(app.dbSize);
                         return;
                 end
@@ -19,19 +19,26 @@ function [res] = identifyClient(app, personId, personName)
                 % Map back to training set to find identity
                 booleanIndex = strcmp(personIdLabel, app.personIndex);
                 matchedIndex = find(booleanIndex);
-                app.PanelAxes.Visible=true;
-                app.UIAxes2.Visible=true;
-                app.UIAxes4.Visible=true;
-                imshow(queryImage, 'parent',app.UIAxes2);
-                title( "Query Face - " + personName,'parent',app.UIAxes2);
-                title("Matched Class - " + getRelativeName(matchedIndex), 'parent', app.UIAxes4);
-                matchedImage=read(app.training(matchedIndex),1);
-                imshow(matchedImage, 'parent', app.UIAxes4);
-                app.OutputLabel.Text = "Person identified!";
+                matchedImage = read(app.training(matchedIndex), 1);
+
+                app.UIAxes.Visible = true;
+                app.UIAxesLabel.Visible = true;
+                app.UIAxesLabel.Text = ['Your Input     -      Matched Identity: ' getRelativeName(matchedIndex)];
+                montage({queryImage, matchedImage}, 'Size', [1, 2], 'Parent', app.UIAxes);
+
+                if (matchedIndex == personId)
+                        app.OutputLabel.FontColor = 'black';
+                        app.OutputLabel.Text = "Person correctly identified!";
+                else
+                        app.OutputLabel.FontColor = 'red';
+                        app.OutputLabel.Text = "Person wrongly identified!";
+                end
                 app.UIFigure.Pointer = 'arrow';
                 res = 0;
         catch
                 res = -1;
+                app.OutputLabel.FontColor = 'red';
+                app.OutputLabel.Text = "Unable to identify the person you choose! Try Again.";
                 warning('Unable to recognize s' + string(personId));
         end
 end

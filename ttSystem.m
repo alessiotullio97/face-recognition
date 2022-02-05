@@ -1,7 +1,7 @@
 %% function TTsystem
 % Training and Testing the system
 function [res] = ttSystem(app)
-        %try
+        try
                 % Set face classifier to not defined
                 app.faceClDefined = 0;
                 % Load Image Information from ATT Face Database Directory
@@ -33,8 +33,8 @@ function [res] = ttSystem(app)
 
                 app.dbSize = size(app.training, 2);
                 res = 0;
-        %catch
-         %       warning('Unable to train the System');
-        %        res = -1;
-       % end
+        catch
+               warning('Unable to train the System');
+               res = -1;
+        end
 end

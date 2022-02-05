@@ -7,10 +7,10 @@ BEAWARE:
 
 1. Aumento tempo campionamento/Selezione campione più significativi 
 per aumentare differenza samples. (Dire all'utente di fare diverse espressioni facciali).
-
+	[v]
 2. Hog Feature su bocca, naso, occhi
 	trying to fix the pseudocode
-
+	[v]
 3. Verifica prestazioni (FER, FAR, EER, ROC)
 Attenzione sul FAR: identity falsa può venire sia da un impostore esterno che interno.
 
@@ -103,3 +103,5 @@ Interesting Paper: http://www.warse.org/IJATCSE/static/pdf/file/ijatcse17842019.
 Nice to Look for Inspiration: https://vision.csee.wvu.edu/publications/
 
 AT&T Face Database: https://www.kaggle.com/kasikrit/att-database-of-faces
+
+https://drive.google.com/file/d/12QkorMzXDtJ0C4xMXMfWod2-cgFJDqZP/view

@@ -1,7 +1,7 @@
 function [res] = verifyClient(app, idFolder, declaredPersonId)
         try
                 if idFolder < 1 || idFolder > app.dbSize
-                        app.OutputMessage.FontColor='red';
+                        app.OutputMessage.FontColor = 'red';
                         app.OutputMessage.Text = 'You must specify a value between 1 and ' + string(app.dbSize);
                         res = -1;
                         return;
@@ -23,8 +23,8 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 
                 % Capture one frame to get its size.
            
-                app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
-                videoPlayer=preview(app.Camera,app.himg);
+                app.himg = image(app.UIAxes, zeros(size(snapshot(app.Camera)), 'uint8'));
+                videoPlayer = preview(app.Camera, app.himg);
                 
                 % Capture one frame to get its size.
                 videoFrame = snapshot(app.Camera);
@@ -95,8 +95,8 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                 if numPts >= 10
                                         % Estimate the geometric transformation between the old points
                                         % and the new points.
-                                        [xform, oldInliers, visiblePoints] = estimateGeometricTransform(...
-                                                oldInliers, visiblePoints, 'similarity', 'MaxDistance', 4);
+                                        [xform, oldInliers, visiblePoints] = estimateGeometricTransform(oldInliers, ...
+                                                visiblePoints, 'similarity', 'MaxDistance', 4);
         
                                         % Apply the transformation to the bounding box.
                                         bboxPoints = transformPointsForward(xform, bboxPoints);
@@ -133,11 +133,12 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                                         runLoop = false;
                                 end
                         end
-                        
                 end
 
                 if(isempty(I))
                         res = -1;
+                        app.OutputLabel.FontColor = 'red';
+                        app.OutputLabel.Text = "Unable to snap a valid frame";
                         warninig("Unable to snap a valid frame");
                         return;
                 end
@@ -160,34 +161,19 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 % Map back to training set to find identity
                 booleanIndex = strcmp(personLabel, app.personIndex);
                 matchedIndex = find(booleanIndex);
-                clear app.Camera;
                 
+                matchedImage = read(app.training(matchedIndex), 1);
+                declaredIdentity = read(app.training(idFolder), 1);
 
-                
-       
-                app.UIAxes.Visible=false;
-                app.himg.Visible=false;
-                app.UIAxes2.Visible=true;
-                app.UIAxes4.Visible=true;
-                app.UIAxes3.Visible=true;
-                app.PanelAxes.Visible=true;
-                app.Panel_2.Visible=true;
+                % Try to show the labels
+                app.UIAxesLabel.Visible = true;
+                app.UIAxesLabel.Text = ['Your Input     -    Declared Identity Class      -    Matched Identity: ' getRelativeName(matchedIndex)];
+                montage({I, declaredIdentity, matchedImage}, 'Size', [1, 3], 'Parent', app.UIAxes);
 
-                imshow(I, 'parent', app.UIAxes2);
-                title( "Query Face", 'parent', app.UIAxes2);
-                matchedImage=read(app.training(matchedIndex),1);
-                imshow(matchedImage, 'parent',app.UIAxes3);
-               
-                title("Matched Class - " + getRelativeName(matchedIndex), 'parent',app.UIAxes3);
-                declaredIdentity=read(app.training(idFolder),1);
-                imshow(declaredIdentity, 'parent',app.UIAxes4);
-                title("Declared Identity Class - " + declaredPersonId, 'parent',app.UIAxes4);
-
-                
                 if matchedIndex == idFolder
                         app.OutputLabel.Text = 'The system verified your identity!';
                 else
-                        app.OutputLabel.FontColor='red';
+                        app.OutputLabel.FontColor = 'red';
                         app.OutputLabel.Text = "You're probably liyng about your real identity, or the system missed it!";
                 end
 
@@ -197,9 +183,11 @@ function [res] = verifyClient(app, idFolder, declaredPersonId)
                 clear app.Camera;
                 release(pointTracker);
                 release(faceDetector);
-                
         catch
                 res = -1;
+                cla(app.UIAxes, 'reset');
+                app.OutputLabel.FontColor = 'red';
+                app.OutputLabel.Text = "Error while recognize your face";
                 warning('Unable to recognize s' + string(idFolder));
         end
 end

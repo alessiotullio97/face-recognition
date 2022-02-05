@@ -7,7 +7,7 @@ function [result] = registerClient(app, dbPath)
                 "Please wait until it is finished!");
         app.UIFigure.Pointer = 'watch';
 
-        dbPersonPath = takePersonPath(dbPath, person);
+        [dbPersonPath, personIndex] = takePersonPath(dbPath, person);
 
         % Create the face detector object.
         faceDetector = vision.CascadeObjectDetector();
@@ -20,17 +20,18 @@ function [result] = registerClient(app, dbPath)
         end
         
         % Capture one frame to get its size.
-        app.UIAxes.Visible=true;
-        app.himg=image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
-        videoPlayer=preview(app.Camera,app.himg);
+        app.UIAxes.Visible = true;
+        app.himg = image(app.UIAxes,zeros(size(snapshot(app.Camera)),'uint8'));
+        videoPlayer = preview(app.Camera,app.himg);
         videoFrame = snapshot(app.Camera);
         frameSize = size(videoFrame);
+        
         runLoop = true;
         numPts = 0;
         
         frameCount = 0;
 
-        iterationForSnap = 100;
+        iterationForSnap = 30;
         maxFrameCount = iterationForSnap * n;
         j = 1;
         
@@ -110,7 +111,7 @@ function [result] = registerClient(app, dbPath)
                         end   
                 end
             
-                % Evert 'iterationForSnap' save the snap within the
+                % Every 'iterationForSnap' save the snap within the
                 % database
                 if mod(frameCount, iterationForSnap) == 0
                         result = saveSnap(videoFrameGray, bboxPolygon, dbPersonPath, j, app);
@@ -118,17 +119,17 @@ function [result] = registerClient(app, dbPath)
                         j = j + 1;
                 end
         end
+        
         app.UIFigure.Pointer = 'arrow';
         
         % Train the system again
         if result == 0 && ttSystem(app) == 0
-            
                 app.OutputLabel.Text = "Operation completed successfully!";
-                %% MODIFY: Show all snapshots taken for registered person
-%                 figure(1);
-%                 montage(app.faceDatabase(j).ImageLocation);
-%                 title('Set of snapshots taken for ' + person)
-        else
+                app.UIAxesLabel.Visible = true;
+                app.UIAxesLabel.Text = ['Set of snapshots taken for ' person];
+                imageList = app.faceDatabase(personIndex).ImageLocation;
+                montage(imageList, 'Parent', app.UIAxes);
+       else
                 app.OutputLabel.FontColor = 'red';
                 app.OutputLabel.Text = 'Unable to take 10 snapshots';
         end
@@ -139,10 +140,7 @@ function [result] = registerClient(app, dbPath)
         release(faceDetector);
         app.InputEditField.Visible = false;
         app.InputEditFieldLabel.Visible = false;
-        app.UIAxes.Visible=false;
-        app.himg.Visible=false;
         app.IdentificationModeButton.Enable = true;
         app.VerificationModeButton.Enable = true;
         app.RegisterYourselvesButton.Enable = true;
-        app.Panel.Visible=true;
 end

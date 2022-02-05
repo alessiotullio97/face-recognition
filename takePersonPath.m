@@ -2,15 +2,13 @@ function [dbPersonPath, personIndex] = takePersonPath(dbPath, person)
 
         % Locate full path of people DB
         personDB = fullfile(dbPath, 'peopleDB.txt');
-
-        %disp(personDB);
-        
+      
         % Perform a lookup on the personDB: verify if the person has been
         % already registered
         fileID = fopen(personDB, 'at+');
         frewind(fileID);
 
-        disp("People db is stored at " + personDB + ". fileID = " + string(fileID));
+%         disp("People db is stored at " + personDB + ". fileID = " + string(fileID));
 
         matched = false;
         %lineI = 0;
